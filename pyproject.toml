@@ -1,0 +1,116 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tldecpy"
+dynamic = ["version"]
+description = "TLDecPy core library for thermoluminescence glow-curve deconvolution."
+readme = "README.md"
+authors = [
+  { name = "Cesar Romero", email = "csronun@gmail.com" },
+]
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+keywords = [
+    "thermoluminescence", "dosimetry", "physics",
+    "fitting", "deconvolution", "science", "radiation"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Typing :: Typed"
+]
+
+dependencies = [
+    "numpy>=1.20",
+    "scipy>=1.7",
+    "pandas>=1.3",
+    "pydantic>=2.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/HideOnParadise/TLDecPy"
+Documentation = "https://hideonparadise.github.io/TLDecPy/"
+"Bug Tracker" = "https://github.com/HideOnParadise/TLDecPy/issues"
+Source = "https://github.com/HideOnParadise/TLDecPy"
+Changelog = "https://github.com/HideOnParadise/TLDecPy/blob/main/CHANGELOG.md"
+Citation = "https://github.com/HideOnParadise/TLDecPy#citation"
+
+[project.optional-dependencies]
+perf = ["numba"]
+test = ["pytest>=8.0"]
+docs = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "numpydoc",
+]
+dev = [
+    "pytest>=8.0",
+    "mypy",
+    "ruff",
+    "matplotlib",
+    "build",
+    "twine",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "numpydoc",
+]
+
+[tool.hatch.version]
+path = "tldecpy/version.py"
+
+[tool.hatch.build]
+include = [
+    "tldecpy/**/*.py",
+    "tldecpy/py.typed",
+    "tldecpy/data/refglow_files/*.csv",
+    "tldecpy/data/*.npz",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["tldecpy"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/tldecpy",
+    "/tests",
+    "/examples",
+    "/README.md",
+    "/LICENSE",
+    "/pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+src = ["tldecpy", "tests"]
+extend-exclude = [
+    "__pycache__",
+    "*.egg-info",
+]
+
+[tool.mypy]
+python_version = "3.10"
+files = ["tldecpy"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+check_untyped_defs = true
+pretty = true
+show_error_codes = true

@@ -1,0 +1,27 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main # Deploy on each commit to main
+
+permissions:
+  contents: write # Required for mkdocs gh-deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          cache: pip
+
+      - name: Install documentation dependencies
+        run: pip install mkdocs mkdocs-material "mkdocstrings[python]" numpydoc
+        
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force

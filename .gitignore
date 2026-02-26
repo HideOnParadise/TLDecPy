@@ -1,0 +1,66 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Tool caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+.cache/
+
+# Coverage / test outputs
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+*.cover
+*.py,cover
+
+# Type checker and notebooks
+.pyre/
+.ipynb_checkpoints/
+
+# IDE/editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local Matplotlib cache/config
+.mplconfig/
+
+# MkDocs
+site/
+
+# OS generated files
+.DS_Store
+Thumbs.db

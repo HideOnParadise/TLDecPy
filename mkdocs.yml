@@ -1,0 +1,35 @@
+site_name: tldecpy
+site_url: https://hideonparadise.github.io/TLDecPy/
+repo_url: https://github.com/HideOnParadise/TLDecPy
+repo_name: HideOnParadise/TLDecPy
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.top
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpydoc
+
+nav:
+  - Home: index.md
+  - Serialization: serialization.md
+  - Versioning: versioning.md
