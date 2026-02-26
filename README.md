@@ -30,7 +30,7 @@ TLDecPy includes single-peak and multi-peak deconvolution with:
 
 ## Installation
 
-### From source (recommended for reviewers)
+### From source
 
 ```bash
 git clone https://github.com/HideOnParadise/TLDecPy.git
