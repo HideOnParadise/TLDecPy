@@ -97,7 +97,8 @@ make qa
 
 ## Citation
 
-If TLDecPy contributes to your research, please cite the software archive (Zenodo DOI once released).
+If TLDecPy contributes to your research, please cite the software archive:
+- DOI: [10.5281/zenodo.18779807](https://doi.org/10.5281/zenodo.18779807)
 
 Suggested BibTeX entry:
 
@@ -105,9 +106,10 @@ Suggested BibTeX entry:
 @software{romero2026tldecpy,
   title   = {TLDecPy},
   author  = {Romero, Cesar},
+  version = {1.0.0},
   year    = {2026},
-  url     = {https://github.com/HideOnParadise/TLDecPy},
-  note    = {Zenodo DOI to be added after first release}
+  doi     = {10.5281/zenodo.18779807},
+  url     = {https://doi.org/10.5281/zenodo.18779807}
 }
 ```
 

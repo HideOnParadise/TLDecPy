@@ -20,10 +20,15 @@
   ],
   "related_identifiers": [
     {
+      "identifier": "10.5281/zenodo.18779807",
+      "relation": "isIdenticalTo",
+      "scheme": "doi"
+    },
+    {
       "identifier": "https://github.com/HideOnParadise/TLDecPy",
       "relation": "isSupplementTo",
       "scheme": "url"
     }
   ],
-  "notes": "This software release is archived for scientific reproducibility."
+  "notes": "This software release is archived for scientific reproducibility. Version DOI: 10.5281/zenodo.18779807."
 }

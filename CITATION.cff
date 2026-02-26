@@ -11,6 +11,7 @@ url: "https://github.com/HideOnParadise/TLDecPy"
 license: "BSD-3-Clause"
 version: "1.0.0"
 date-released: 2026-02-26
+doi: "10.5281/zenodo.18779807"
 keywords:
   - thermoluminescence
   - glow-curve deconvolution
