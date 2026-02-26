@@ -87,6 +87,17 @@ For an end-to-end OTOR demonstration, see:
 - `examples/example_otor_fit.py`
 - `examples/example_refglow002_manual_fit.py` (manual Refglow x002 deconvolution)
 
+## Reproducibility Scripts
+
+Validation and paper-generation scripts are available in `scripts/`, including:
+
+- Refglow benchmarks (`phase4_refglow_benchmark.py`, `phase5_refglow_x009_otor_lw.py`)
+- Continuous-distribution validation (`phase6_gdalo_continuous_validation.py`)
+- Uncertainty validation (`phase7_uncertainty_validation.py`)
+- Figure orchestration (`make_paper_figures.py`)
+
+See `scripts/README.md` for full details and smoke-run commands.
+
 ## Development Quality Checks
 
 ```bash

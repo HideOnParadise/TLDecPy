@@ -61,6 +61,9 @@ htmlcov/
 # MkDocs
 site/
 
+# Script outputs / local artifacts
+output/
+
 # OS generated files
 .DS_Store
 Thumbs.db
