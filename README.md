@@ -84,6 +84,7 @@ for peak in result.peaks:
 For an end-to-end OTOR demonstration, see:
 
 - `examples/example_otor_fit.py`
+- `examples/example_refglow002_manual_fit.py` (manual Refglow x002 deconvolution)
 
 ## Development Quality Checks
 
@@ -96,17 +97,17 @@ make qa
 
 ## Citation
 
-If TLDecPy contributes to your research, please cite both the software repository and the associated manuscript in *Radiation Measurements*.
+If TLDecPy contributes to your research, please cite the software archive (Zenodo DOI once released).
 
-Suggested BibTeX entry (update fields once the article metadata/DOI is available):
+Suggested BibTeX entry:
 
 ```bibtex
-@article{romero2026tldecpy,
-  title   = {TLDecPy: An open-source Python library for thermoluminescence glow-curve deconvolution},
-  author  = {Romero, Cesar and collaborators},
-  journal = {Radiation Measurements},
+@software{romero2026tldecpy,
+  title   = {TLDecPy},
+  author  = {Romero, Cesar},
   year    = {2026},
-  note    = {Manuscript submitted; update with volume, pages, and DOI after publication}
+  url     = {https://github.com/HideOnParadise/TLDecPy},
+  note    = {Zenodo DOI to be added after first release}
 }
 ```
 

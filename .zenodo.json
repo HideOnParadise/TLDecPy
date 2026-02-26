@@ -1,0 +1,29 @@
+{
+  "title": "TLDecPy",
+  "upload_type": "software",
+  "description": "Open-source Python library for thermoluminescence glow-curve deconvolution, including FO, SO, GO, OTOR, mixed-order, and continuous trap-distribution models.",
+  "access_right": "open",
+  "license": "BSD-3-Clause",
+  "version": "1.0.0",
+  "publication_date": "2026-02-26",
+  "creators": [
+    {
+      "name": "Romero, Cesar"
+    }
+  ],
+  "keywords": [
+    "thermoluminescence",
+    "glow-curve deconvolution",
+    "kinetic modeling",
+    "radiation dosimetry",
+    "python"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/HideOnParadise/TLDecPy",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "notes": "This software release is archived for scientific reproducibility."
+}
