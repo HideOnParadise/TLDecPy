@@ -3,6 +3,7 @@
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![CI](https://github.com/HideOnParadise/TLDecPy/actions/workflows/ci.yml/badge.svg)](https://github.com/HideOnParadise/TLDecPy/actions/workflows/ci.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18779807.svg)](https://doi.org/10.5281/zenodo.18779807)
 
 `tldecpy` is an open-source scientific Python library for thermoluminescence (TL) glow-curve analysis, nonlinear deconvolution, and kinetic-model benchmarking.
 
