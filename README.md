@@ -4,101 +4,99 @@
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![CI](https://github.com/HideOnParadise/TLDecPy/actions/workflows/ci.yml/badge.svg)](https://github.com/HideOnParadise/TLDecPy/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18779807.svg)](https://doi.org/10.5281/zenodo.18779807)
+[![Docs](https://img.shields.io/badge/docs-online-blue)](https://hideonparadise.github.io/TLDecPy/)
 
-`tldecpy` is an open-source scientific Python library for thermoluminescence (TL) glow-curve analysis, nonlinear deconvolution, and kinetic-model benchmarking.
+`tldecpy` is an open-source Python library for thermoluminescence (TL) glow-curve deconvolution and kinetic-model benchmarking.
 
-The project is designed for reproducible research workflows in radiation dosimetry and TL materials analysis, with typed APIs and physically motivated models.
+**[Documentation](https://hideonparadise.github.io/TLDecPy/)**
 
 ## Supported Kinetic Models
-
-TLDecPy includes single-peak and multi-peak deconvolution with:
 
 - First-order (FO): `fo_rq`, `fo_ka`, `fo_wp`, `fo_rb`
 - Second-order (SO): `so_ks`, `so_la`
 - General-order (GO): `go_kg`, `go_rq`, `go_ge`
 - One-Trap One-Recombination center (OTOR): `otor_lw` (Lambert W), `otor_wo` (Wright Omega)
-- Mixed-order families: `mo_kitis`, `mo_quad`, `mo_vej`
+- Mixed-order: `mo_kitis`, `mo_quad`, `mo_vej`
 - Continuous trap-distribution models (Gaussian and Exponential forms)
 
 ## Highlights
 
-- Multi-component deconvolution with robust losses and optional Poisson weighting
-- Automatic initialization helpers (`autoinit_multi`, peak detection, preprocessing)
-- Uncertainty metrics and diagnostics in fit outputs
-- Synthetic data generation utilities for method validation
-- Bundled Refglow benchmark datasets (`x001` to `x010`)
-- Typed models and results (`py.typed`, Pydantic v2 schemas)
+- Full manual control over peak number, model selection, initial parameters, and bounds
+- Multi-component deconvolution with robust loss functions and optional Poisson weighting
+- Uncertainty propagation and fit quality metrics (FOM, R², AIC, BIC) in all fit outputs
+- Synthetic curve generation for method validation
+- Bundled Refglow benchmark datasets (`x001`–`x010`)
+- Typed API with Pydantic v2 schemas (`py.typed`)
 
 ## Installation
-
-### From source
-
-```bash
-git clone https://github.com/HideOnParadise/TLDecPy.git
-cd TLDecPy
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -e ".[dev]"
-```
-
-### PyPI install
 
 ```bash
 pip install tldecpy
 ```
 
+Or from source:
+
+```bash
+git clone https://github.com/HideOnParadise/TLDecPy.git
+cd TLDecPy
+pip install -e ".[dev]"
+```
+
 ## Quickstart
+
+The recommended workflow is to define peaks explicitly, with physically motivated initial values and bounds for each component:
 
 ```python
 import tldecpy as tl
 
-# 1) Load a reference glow curve (Refglow)
-T, I = tl.load_refglow("x001")
+T, I = tl.load_refglow("x002")
 
-# 2) Automatic initialization of peaks and optional background
-peaks, bg = tl.autoinit_multi(
-    T,
-    I,
-    max_peaks=3,
-    allow_models=("fo_rq", "go_kg", "otor_lw"),
-    bg_mode="auto",
-)
+peaks = [
+    tl.PeakSpec(
+        name="P1", model="fo_rq",
+        init={"Tm": 417.0, "Im": 12000.0, "E": 1.35},
+        bounds={"Tm": (390.0, 435.0), "Im": (0.0, 40000.0), "E": (0.8, 2.2)},
+    ),
+    tl.PeakSpec(
+        name="P2", model="fo_rq",
+        init={"Tm": 456.0, "Im": 18000.0, "E": 1.48},
+        bounds={"Tm": (435.0, 472.0), "Im": (0.0, 50000.0), "E": (0.8, 2.4)},
+    ),
+    tl.PeakSpec(
+        name="P3", model="fo_rq",
+        init={"Tm": 484.0, "Im": 28000.0, "E": 1.60},
+        bounds={"Tm": (468.0, 500.0), "Im": (0.0, 70000.0), "E": (0.9, 2.6)},
+    ),
+]
 
-# 3) Run deconvolution
 result = tl.fit_multi(
-    T,
-    I,
+    T, I,
     peaks=peaks,
-    bg=bg,
-    beta=1.0,
-    robust=tl.RobustOptions(loss="soft_l1", f_scale=2.0, weights="poisson"),
+    bg=None,
+    beta=8.4,
     options=tl.FitOptions(local_optimizer="trf"),
 )
 
-print("Converged:", result.converged)
-print("R2:", f"{result.metrics.R2:.4f}", "FOM:", f"{result.metrics.FOM:.3f}%")
-for peak in result.peaks:
-    print(peak.name, peak.model, peak.params)
+print(f"Converged: {result.converged}")
+print(f"R2: {result.metrics.R2:.4f}   FOM: {result.metrics.FOM:.3f}%")
+for p in result.peaks:
+    print(p.name, p.model, p.params)
 ```
 
-For an end-to-end OTOR demonstration, see:
-
-- `examples/example_otor_fit.py`
-- `examples/example_refglow002_manual_fit.py` (manual Refglow x002 deconvolution)
+For more examples, including OTOR fits and robust loss functions, see the [`examples/`](examples/) directory and the [documentation](https://hideonparadise.github.io/TLDecPy/).
 
 ## Reproducibility Scripts
 
-Validation and paper-generation scripts are available in `scripts/`, including:
+All scripts used to generate paper figures and validation results are in `scripts/`:
 
-- Refglow benchmarks (`phase4_refglow_benchmark.py`, `phase5_refglow_x009_otor_lw.py`)
-- Continuous-distribution validation (`phase6_gdalo_continuous_validation.py`)
-- Uncertainty validation (`phase7_uncertainty_validation.py`)
-- Figure orchestration (`make_paper_figures.py`)
+- Refglow benchmarks: `phase4_refglow_benchmark.py`, `phase5_refglow_x009_otor_lw.py`
+- Continuous-distribution validation: `phase6_gdalo_continuous_validation.py`
+- Uncertainty validation: `phase7_uncertainty_validation.py`
+- Figure generation: `make_paper_figures.py`
 
-See `scripts/README.md` for full details and smoke-run commands.
+See `scripts/README.md` for details.
 
-## Development Quality Checks
+## Development
 
 ```bash
 make lint
@@ -109,10 +107,9 @@ make qa
 
 ## Citation
 
-If TLDecPy contributes to your research, please cite the software archive:
-- DOI: [10.5281/zenodo.18779807](https://doi.org/10.5281/zenodo.18779807)
+If TLDecPy contributes to your research, please cite:
 
-Suggested BibTeX entry:
+- DOI: [10.5281/zenodo.18779807](https://doi.org/10.5281/zenodo.18779807)
 
 ```bibtex
 @software{romero2026tldecpy,
@@ -127,4 +124,4 @@ Suggested BibTeX entry:
 
 ## License
 
-This project is distributed under the BSD 3-Clause License. See [LICENSE](LICENSE).
+BSD 3-Clause License. See [LICENSE](LICENSE).
