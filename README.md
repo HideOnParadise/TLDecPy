@@ -5,10 +5,11 @@
 [![CI](https://github.com/HideOnParadise/TLDecPy/actions/workflows/ci.yml/badge.svg)](https://github.com/HideOnParadise/TLDecPy/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18779807.svg)](https://doi.org/10.5281/zenodo.18779807)
 [![Docs](https://img.shields.io/badge/docs-online-blue)](https://hideonparadise.github.io/TLDecPy/)
+[![Web App](https://img.shields.io/badge/web%20app-tldec.tech-green)](https://tldec.tech)
 
 `tldecpy` is an open-source Python library for thermoluminescence (TL) glow-curve deconvolution and kinetic-model benchmarking.
 
-**[Documentation](https://hideonparadise.github.io/TLDecPy/)**
+**[Documentation](https://hideonparadise.github.io/TLDecPy/)** · **[Web interface](https://tldec.tech)** (TLDec Web — powered by tldecpy)
 
 ## Supported Kinetic Models
 
