@@ -1,8 +1,9 @@
 # How to set up peaks manually
 
-Use this guide when `autoinit_multi` misses a peak, when you have prior
-knowledge of peak positions from literature, or when you need tight bounds for
-a publication-quality fit.
+In TL deconvolution, peak positions and kinetic parameters are generally
+constrained by the material under study. Defining each component explicitly —
+with physically motivated initial values and bounds — gives reproducible,
+interpretable results and is the standard approach for publication work.
 
 ---
 
