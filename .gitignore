@@ -67,3 +67,30 @@ output/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# AI assistant configs (local only)
+.claude/
+CLAUDE.md
+.cursor/
+.aider*
+.continue/
+
+# Jupyter / data science artifacts
+*.ipynb_checkpoints
+*.pkl
+*.h5
+*.hdf5
+*.npy
+*.npz_tmp
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+*.orig
+
+# Local scripts output
+scripts/output/
+figures/
+*.png
+*.pdf

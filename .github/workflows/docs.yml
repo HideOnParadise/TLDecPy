@@ -1,27 +1,72 @@
-name: Deploy Documentation
+name: Documentation
 
 on:
   push:
-    branches:
-      - main # Deploy on each commit to main
+    branches: [main]
+    tags: ['v*.*.*']
+  pull_request:
+    branches: [main]
 
 permissions:
-  contents: write # Required for mkdocs gh-deploy
+  contents: write  # required for gh-deploy / mike push to gh-pages
 
 jobs:
-  deploy:
+  # ── Job 1: strict build check ─────────────────────────────────────────────
+  # Runs on every PR and every push. Catches broken references and bad links
+  # before they reach main or a release.
+  build:
+    name: Build docs (strict)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
+
+      - uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: "3.11"
           cache: pip
 
-      - name: Install documentation dependencies
-        run: pip install mkdocs mkdocs-material "mkdocstrings[python]" numpydoc
-        
-      - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force
+      - name: Install docs dependencies
+        run: pip install -e ".[docs]"
+
+      - name: mkdocs build --strict
+        run: mkdocs build --strict
+
+  # ── Job 2: deploy ─────────────────────────────────────────────────────────
+  # Runs only on push events (not on PRs).
+  #   • push to main  → deploys as "dev" alias
+  #   • push of v*.*.*tag → deploys as "<version>" and updates "latest" alias
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # mike needs full git history to manage gh-pages
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install docs dependencies
+        run: pip install -e ".[docs]"
+
+      - name: Configure git identity for mike
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Push to main → publish under the "dev" label.
+      - name: Deploy dev docs
+        if: github.ref == 'refs/heads/main'
+        run: mike deploy --push dev
+
+      # Version tag → publish under "<X.Y.Z>" and update the "latest" alias.
+      - name: Deploy release docs
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          mike deploy --push --update-aliases "$VERSION" latest
+          mike set-default --push latest

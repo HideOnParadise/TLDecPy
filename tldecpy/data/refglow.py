@@ -57,29 +57,67 @@ def resolve_refglow_path(key: str) -> Path:
 
 def load_refglow(key: str) -> tuple[np.ndarray, np.ndarray]:
     r"""
-    Load one Refglow curve as temperature and intensity arrays.
+    Load one Refglow/GLOCANIN benchmark curve as temperature and intensity arrays.
 
     Parameters
     ----------
     key : str
-        Dataset identifier in the form ``xNNN`` or ``RefglowNNN``
-        with ``NNN`` in ``001..010``.
+        Dataset identifier.  Accepted forms:
+
+        - ``"xNNN"`` — e.g. ``"x001"``, ``"x010"``
+        - ``"RefglowNNN"`` — e.g. ``"Refglow003"`` (mapped to ``"x003"``)
+
+        Available datasets (``NNN`` from ``001`` to ``010``):
+
+        .. list-table::
+           :header-rows: 1
+
+           * - Key
+             - Description
+           * - ``x001``
+             - Synthetic, 1 peak (FO)
+           * - ``x002``
+             - Synthetic, 4 peaks (FO), :math:`\beta` = 8.4 K/s
+           * - ``x003``–``x008``
+             - TLD-100, 5 peaks
+           * - ``x009``
+             - TLD-700, 9 peaks (complex)
+           * - ``x010``
+             - TLD-100, low dose
 
     Returns
     -------
     tuple[numpy.ndarray, numpy.ndarray]
-        Temperature :math:`T` (K) and measured TL intensity :math:`I(T)`.
+        ``T`` — temperature array in kelvin (float64, 1-D).
+        ``I`` — TL intensity array in arbitrary detector counts (float64, 1-D).
+        Both arrays have the same length and contain only finite values.
 
     Raises
     ------
     ValueError
-        If the key is not recognized or the file does not contain valid numeric pairs.
+        If ``key`` is not one of the ten recognised identifiers, or if the
+        CSV file does not contain at least two columns of valid numeric data.
     FileNotFoundError
-        If the requested dataset file cannot be located.
+        If the dataset file cannot be located inside the package data
+        directory.
+
+    Examples
+    --------
+    >>> import tldecpy as tl
+    >>> T, I = tl.load_refglow("x001")
+    >>> print(T.shape, I.max())
+
+    >>> # Alternative key form
+    >>> T2, I2 = tl.load_refglow("Refglow002")
 
     References
     ----------
-    .. [1] Bos, A. J. J., et al. (1993, 1994), Refglow/GLOCANIN benchmark data.
+    .. [1] Bos, A. J. J., et al. (1993). *Intercomparison of glow curve
+           analysis computer programs: the GLOCANIN project.*
+           Radiat. Prot. Dosim. 47, 473.
+    .. [2] Bos, A. J. J., et al. (1994). *GLOCANIN: A data set for the
+           intercomparison of glow-curve analysis programs.*
+           Radiat. Meas. 23, 393.
     """
     clean_key = str(key).strip().lower().replace("refglow", "x")
     csv_path = resolve_refglow_path(clean_key)

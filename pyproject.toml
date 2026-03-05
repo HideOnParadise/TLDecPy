@@ -52,6 +52,7 @@ docs = [
     "mkdocs-material",
     "mkdocstrings[python]",
     "numpydoc",
+    "mike",
 ]
 dev = [
     "pytest>=8.0",
@@ -64,6 +65,7 @@ dev = [
     "mkdocs-material",
     "mkdocstrings[python]",
     "numpydoc",
+    "mike",
 ]
 
 [tool.hatch.version]

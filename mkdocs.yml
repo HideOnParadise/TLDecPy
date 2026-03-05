@@ -1,7 +1,9 @@
 site_name: tldecpy
+site_description: Thermoluminescence glow-curve deconvolution in Python
 site_url: https://hideonparadise.github.io/TLDecPy/
 repo_url: https://github.com/HideOnParadise/TLDecPy
 repo_name: HideOnParadise/TLDecPy
+edit_uri: edit/main/docs/
 
 theme:
   name: material
@@ -18,8 +20,39 @@ theme:
         name: Switch to light mode
   features:
     - navigation.tabs
+    - navigation.sections
     - navigation.top
+    - toc.follow
     - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - search.highlight
+    - search.suggest
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+
+extra:
+  version:
+    provider: mike
+    default: latest
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 plugins:
   - search
@@ -27,9 +60,37 @@ plugins:
       handlers:
         python:
           options:
-            docstring_style: numpydoc
+            docstring_style: numpy
+            show_source: true
+            show_root_heading: true
+            merge_init_into_class: true
+            separate_signature: true
 
 nav:
   - Home: index.md
-  - Serialization: serialization.md
+  - Tutorials:
+    - tutorials/index.md
+    - Quick start — auto fit: tutorials/quickstart.md
+    - OTOR end-to-end fit: tutorials/otor_fit.md
+  - How-to guides:
+    - how-to/index.md
+    - One-shot automatic deconvolution: how-to/iterative_deconvolution.md
+    - Manual peak setup: how-to/manual_peak_setup.md
+    - Robust fitting and loss functions: how-to/robust_fitting.md
+    - Uncertainty budget: how-to/uncertainty_budget.md
+    - Fix and freeze parameters: how-to/fix_parameters.md
+    - Synthetic curves with noise: how-to/simulate_synthetic.md
+    - Serialize and archive results: serialization.md
+  - Explanation:
+    - explanation/index.md
+    - Kinetic models — physics: explanation/kinetic_models.md
+    - Fit quality metrics: explanation/fit_metrics.md
+    - Uncertainty propagation: explanation/uncertainty_methods.md
+    - Continuous trap distributions: explanation/continuous_traps.md
+  - Reference:
+    - reference/index.md
+    - Public API: reference/api.md
+    - Schemas: reference/schemas.md
+    - Models: reference/models.md
+    - Errors: reference/errors.md
   - Versioning: versioning.md

@@ -233,35 +233,80 @@ def autoinit_multi(
     sensitivity: float = 1.0,
 ) -> Tuple[List[PeakSpec], Optional[BackgroundSpec]]:
     r"""
-    Build heuristic peak/background initialization for multi-peak deconvolution.
+    Build heuristic peak/background initialisation for multi-peak deconvolution.
+
+    The function executes three stages:
+
+    1. **Preprocess** — Savitzky-Golay smoothing + robust outlier removal.
+    2. **Detect** — CWT-based peak finder returns candidate positions, FWHM
+       and asymmetry coefficient :math:`\mu_g`.
+    3. **Seed** — assigns a kinetic model per peak using :math:`\mu_g`, estimates
+       activation energy :math:`E` with Chen-style FWHM heuristics, and
+       constructs :class:`~tldecpy.schemas.PeakSpec` objects with automatic bounds.
 
     Parameters
     ----------
     x : numpy.ndarray
-        Temperature grid :math:`T` in kelvin.
+        Temperature grid :math:`T` in kelvin. Must be 1-D with at least
+        10 points.
     y : numpy.ndarray
-        Measured TL intensity :math:`I(T)`.
+        Measured TL intensity :math:`I(T)`. Same length as ``x``. Values
+        should be non-negative; negative values are clipped to zero during
+        preprocessing.
     max_peaks : int, default=6
-        Maximum number of peaks to seed.
+        Maximum number of peaks to include in the returned list.  If more
+        candidates are detected, the ``max_peaks`` highest-intensity ones
+        are kept and sorted by temperature.
     allow_models : tuple[str, ...], default=("fo", "go", "otor_lw")
-        Allowed model families/aliases used by the seeding logic.
+        Allowed model families or canonical keys.  The seeding algorithm
+        selects the best match from this set based on peak asymmetry.
+        Continuous models (``"cont_gauss"``, ``"cont_exp"``) are only
+        selected when explicitly listed here.
     bg_mode : {"linear", "exponential", "none", "auto"}, default="auto"
-        Background initialization mode.
+        Background initialisation mode.  ``"auto"`` adds an exponential
+        background when the signal at the curve boundaries is significantly
+        above the noise floor; ``"none"`` suppresses background entirely.
     sensitivity : float, default=1.0
-        Peak detection sensitivity passed to :func:`pick_peaks`.
+        Peak detection sensitivity multiplier passed to :func:`pick_peaks`.
+        Values > 1 lower prominence thresholds and recover weaker peaks;
+        values < 1 raise thresholds and suppress weak candidates.
+        Range: (0, ∞).
 
     Returns
     -------
     tuple[list[PeakSpec], BackgroundSpec | None]
-        Peak specifications and optional background specification.
+        ``peaks`` — list of :class:`~tldecpy.schemas.PeakSpec`, one per
+        detected candidate, with ``init``, ``bounds`` and ``name`` filled in.
+        ``bg`` — :class:`~tldecpy.schemas.BackgroundSpec` if a background was
+        inferred, or ``None``.
+
+    Raises
+    ------
+    ValueError
+        If ``x`` or ``y`` are not 1-D arrays with at least 10 points.
 
     Notes
     -----
-    Activation-energy initialization uses Chen-style peak-shape heuristics.
+    Activation-energy initialisation uses Chen-style peak-shape heuristics:
+
+    .. math::
+
+        E \approx c_w \frac{k T_m^2}{\omega} - b_w (2 k T_m)
+
+    where :math:`\omega` is the FWHM and the constants :math:`c_w`, :math:`b_w`
+    depend on the kinetic order.
+
+    Examples
+    --------
+    >>> import tldecpy as tl
+    >>> T, I = tl.load_refglow("x002")
+    >>> peaks, bg = tl.autoinit_multi(T, I, max_peaks=4, allow_models=("fo_rq",))
+    >>> print(len(peaks), "peaks seeded")
 
     References
     ----------
-    .. [1] Chen, R., and McKeever, S. W. S. (1997). Theory of thermoluminescence and related phenomena.
+    .. [1] Chen, R., and McKeever, S. W. S. (1997). *Theory of
+           thermoluminescence and related phenomena.* World Scientific.
     """
     y_clean = preprocess(x, y)
     seeds = pick_peaks(x, y_clean, sensitivity=sensitivity)

@@ -175,18 +175,42 @@ class FitOptions(PygcdBaseModel):
 
     Attributes
     ----------
-    local_optimizer : {"trf", "dogbox", "lm"}
-        Local least-squares method used by SciPy.
-    max_nfev : int | None
-        Maximum number of objective function evaluations.
-    ftol : float
-        Relative tolerance for objective reduction.
-    xtol : float
-        Relative tolerance for parameter-step convergence.
-    gtol : float
-        Gradient norm tolerance.
-    uncertainty : UncertaintyOptions | None
-        Optional uncertainty propagation settings.
+    local_optimizer : {"trf", "dogbox", "lm"}, default="trf"
+        Local least-squares method passed to
+        ``scipy.optimize.least_squares``:
+
+        - ``"trf"`` — Trust Region Reflective.  Supports box bounds and all
+          robust losses.  **Recommended for most fits.**
+        - ``"dogbox"`` — Dogleg method.  Supports bounds and robust losses;
+          faster on well-conditioned small problems.
+        - ``"lm"`` — Levenberg-Marquardt.  Does **not** support box bounds
+          natively (soft penalties are used) and only supports
+          ``loss="linear"``.  Use for simple, unconstrained problems.
+    max_nfev : int | None, optional
+        Maximum number of objective function evaluations.  ``None`` lets
+        SciPy choose a default (≈ 100 × number of parameters).
+    ftol : float, default=1e-8
+        Relative cost-function reduction tolerance for convergence.
+    xtol : float, default=1e-8
+        Relative parameter-step size tolerance for convergence.
+    gtol : float, default=1e-8
+        Gradient norm tolerance for convergence.
+    uncertainty : UncertaintyOptions | None, optional
+        If provided and ``uncertainty.enabled=True``, a full uncertainty
+        budget is computed after fitting and attached to ``MultiFitResult``.
+
+    Examples
+    --------
+    >>> import tldecpy as tl
+    >>> opts = tl.FitOptions(local_optimizer="trf")
+    >>> opts_uc = tl.FitOptions(
+    ...     local_optimizer="trf",
+    ...     uncertainty=tl.UncertaintyOptions(
+    ...         enabled=True,
+    ...         noise_pct=1.0,
+    ...         calibration_pct=0.5,
+    ...     ),
+    ... )
     """
 
     local_optimizer: Literal["trf", "dogbox", "lm"] = Field(
@@ -204,25 +228,64 @@ class FitOptions(PygcdBaseModel):
 
 
 class RobustOptions(PygcdBaseModel):
-    """
+    r"""
     Robust loss and weighting options for TL curve fitting.
 
     Attributes
     ----------
-    loss : {"linear", "soft_l1", "huber", "cauchy", "arctan", "tukey"}
-        Residual loss function.
-    f_scale : float
-        Scale parameter for robust losses.
-    loss_param : float | None
-        Optional extra loss parameter (for example Tukey constant).
-    weights : {"none", "poisson"}
+    loss : {"linear", "soft_l1", "huber", "cauchy", "arctan", "tukey"}, default="linear"
+        Residual loss function :math:`\rho(r)` applied to the normalised
+        residuals before summing the cost:
+
+        - ``"linear"`` — :math:`r^2` (ordinary least squares, default).
+        - ``"soft_l1"`` — :math:`2(\sqrt{1+r^2}-1)`, smooth L1.
+        - ``"huber"`` — quadratic for :math:`|r|<1`, linear otherwise.
+        - ``"cauchy"`` — :math:`\ln(1+r^2)`, heavy-tailed downweighting.
+        - ``"arctan"`` — :math:`\arctan(r^2)`, bounded loss.
+        - ``"tukey"`` — biweight (requires ``loss_param``).
+
+        ``"lm"`` optimizer supports only ``"linear"``.
+    f_scale : float, default=1.0
+        Residual scale parameter.  Residuals with absolute value < ``f_scale``
+        are treated as inliers (OLS regime); larger residuals are robustly
+        downweighted.  Set to approximately the noise floor of the detector
+        in the same units as ``y``.
+    loss_param : float | None, optional
+        Extra loss parameter used by Tukey biweight (the Tukey constant ``c``).
+        Ignored for other losses.
+    weights : {"none", "poisson"}, default="none"
         Residual weighting strategy.
-    multi_start : int
-        Number of randomized restarts.
-    ci_bootstrap : bool
-        Enables bootstrap confidence intervals when ``True``.
-    n_bootstrap : int
-        Number of bootstrap iterations.
+
+        - ``"none"`` — all channels equally weighted.
+        - ``"poisson"`` — each residual is divided by :math:`\sqrt{I_i}`,
+          giving inverse-variance weighting for Poisson (counting) noise.
+    multi_start : int, default=0
+        Number of randomised restarts with ±10 % parameter perturbation.
+        The best-cost solution is returned.  ``0`` disables restarts.
+    ci_bootstrap : bool, default=False
+        If ``True``, compute 95 % bootstrap confidence intervals via residual
+        resampling.  Results are stored in ``PeakResult.ci_95``.
+        Requires ``n_bootstrap`` extra full solves — can be slow.
+    n_bootstrap : int, default=100
+        Number of bootstrap iterations when ``ci_bootstrap=True``.
+        Use 200–500 for publication-quality intervals.
+
+    Examples
+    --------
+    >>> import tldecpy as tl
+    >>> # Robust fit with Poisson weighting
+    >>> opts = tl.RobustOptions(
+    ...     loss="soft_l1",
+    ...     f_scale=5.0,
+    ...     weights="poisson",
+    ... )
+    >>> # Bootstrap confidence intervals
+    >>> opts_ci = tl.RobustOptions(
+    ...     loss="soft_l1",
+    ...     f_scale=5.0,
+    ...     ci_bootstrap=True,
+    ...     n_bootstrap=200,
+    ... )
     """
 
     loss: Literal["linear", "soft_l1", "huber", "cauchy", "arctan", "tukey"] = Field(
@@ -284,16 +347,52 @@ class PeakSpec(PygcdBaseModel):
     Attributes
     ----------
     name : str | None
-        Component identifier.
+        Human-readable component identifier (e.g. ``"P1"``).  Used as a
+        prefix in parameter names within ``MultiFitResult.hit_bounds``
+        and ``PeakResult.uncertainties``.  Auto-assigned as ``"P<n>"``
+        if omitted.
     model : str
-        Kinetic model key (for example ``fo_rq``, ``go_kg``, ``otor_lw``).
+        Kinetic model key.  Accepted values include canonical keys
+        (``"fo_rq"``, ``"fo_rb"``, ``"go_kg"``, ``"otor_lw"``,
+        ``"cont_gauss"`` …), family short-names (``"fo"``, ``"go"``), and
+        registered aliases.  Call ``tl.list_models()`` for the full list.
     init : dict[str, float]
-        Initial parameter values. Typical physical parameters include
-        :math:`T_m` (K), :math:`I_m`, :math:`E` (eV), and model-specific terms.
-    bounds : dict[str, tuple[float, float]] | None
-        Optional parameter bounds as ``(min, max)``.
-    fixed : dict[str, float] | None
-        Parameters fixed to constant numeric values.
+        Initial parameter values passed to the optimizer.  Required keys
+        depend on the model family:
+
+        - FO / SO / GO / MO / OTOR: ``"Tm"`` (K), ``"Im"`` (counts),
+          ``"E"`` (eV).  GO also requires ``"b"`` (1–2); OTOR requires
+          ``"R"`` (0–1); MO requires ``"alpha"`` (0–1).
+        - Continuous (``"cont_gauss"``, ``"cont_exp"``): ``"Tn"`` (K),
+          ``"In"`` (counts), ``"E0"`` (eV), ``"sigma"`` (eV).
+          Legacy aliases ``"Tm"``, ``"Im"``, ``"E"`` are accepted.
+
+        Missing keys receive model-specific defaults inside the fitter.
+    bounds : dict[str, tuple[float, float]] | None, optional
+        Parameter bounds as ``{name: (lower, upper)}``.  If omitted,
+        automatic bounds are derived from ``init`` values inside the fitter.
+        Explicit bounds override automatic ones.
+    fixed : dict[str, float | bool] | None, optional
+        Parameters held constant during optimisation.  Two forms:
+
+        - ``{"b": 1.8}`` — ``b`` is fixed to 1.8 regardless of ``init``.
+        - ``{"b": True}`` — ``b`` is fixed to ``init["b"]``.
+        - ``{"b": False}`` — ``b`` is free (same as omitting it).
+
+    Examples
+    --------
+    >>> import tldecpy as tl
+    >>> peak = tl.PeakSpec(
+    ...     name="P1",
+    ...     model="fo_rq",
+    ...     init={"Tm": 450.0, "Im": 5000.0, "E": 1.2},
+    ...     bounds={"Tm": (400.0, 500.0), "E": (0.8, 2.0)},
+    ... )
+    >>> go_peak = tl.PeakSpec(
+    ...     model="go_kg",
+    ...     init={"Tm": 490.0, "Im": 3000.0, "E": 1.5, "b": 1.8},
+    ...     fixed={"b": True},          # hold kinetic order fixed
+    ... )
     """
 
     name: Optional[str] = Field(None, description="Unique component name.")

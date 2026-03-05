@@ -54,29 +54,87 @@ def _wexpz_principal_stable(Z: np.ndarray) -> np.ndarray:
 def otor_lw(
     T: np.ndarray, Im: float, E: float, Tm: float, R: float, beta: float = 1.0
 ) -> np.ndarray:
-    """
-    OTOR via Lambert W using Semi-Analytical Expressions.
-    Forces peak maximum at Tm using empirical correction factors for 's'.
+    r"""
+    OTOR model using the Lambert W semi-analytical solution.
+
+    Implements the One Trap One Recombination center (OTOR) kinetics using
+    the analytical Lambert W expressions derived by Kitis & Vlachos (2013)
+    and refined by Sadek et al. (2015).  The peak maximum is forced to occur
+    at :math:`T_m` via empirical correction factors applied to the frequency
+    factor :math:`s`.
+
+    Two branches are handled automatically:
+
+    - :math:`R < 1` branch — principal Lambert W function :math:`W_0`.
+    - :math:`R > 1` branch — branch :math:`W_{-1}`.
 
     Parameters
     ----------
-    T : np.ndarray
-        Temperature array in K.
+    T : numpy.ndarray
+        Temperature array in kelvin (1-D, float64).  Values below 1e-12 K
+        are clamped to prevent division by zero.
     Im : float
-        Peak maximum intensity.
+        Peak maximum intensity :math:`I_m` in detector counts.
+        Must be > 0.
     E : float
-        Trap depth in eV.
+        Trap activation energy :math:`E` in eV.  Range: (0.1, 5.0) eV.
     Tm : float
-        Temperature at maximum in K.
+        Temperature at peak maximum :math:`T_m` in kelvin.  Range: > 0 K.
     R : float
-        Retrapping ratio parameter :math:`R = A_n/A_m`.
-    beta : float
-        Heating rate (kept for API compatibility; current semi-analytical form here does not use it).
+        Retrapping ratio :math:`R = A_n / A_m`, where :math:`A_n` is the
+        retrapping coefficient and :math:`A_m` the recombination coefficient
+        (both in cm³/s).
+
+        - :math:`R \to 0` — negligible retrapping (approaches FO kinetics).
+        - :math:`R = 0.5` — equal retrapping and recombination.
+        - :math:`R \to 1` — dominant retrapping (approaches SO kinetics).
+
+        .. warning::
+           A numerical singularity exists near :math:`R \approx 0.96` on the
+           :math:`R < 1` branch.  The implementation clamps :math:`R \leq 0.95`
+           internally.  **Always set the upper bound to at most 0.90** in
+           :class:`~tldecpy.schemas.PeakSpec` bounds.
+    beta : float, default=1.0
+        Heating rate :math:`\beta` in K/s.  Kept for API compatibility;
+        the current semi-analytical form absorbs :math:`\beta` into the
+        empirical correction of :math:`s` and does not use it directly.
 
     Returns
     -------
-    np.ndarray
-        Intensity array.
+    numpy.ndarray
+        TL intensity array :math:`I(T)` in the same units as ``Im``.
+        All values are non-negative (clipped to 0).
+
+    Notes
+    -----
+    The intensity is computed as:
+
+    .. math::
+
+        I(T) = I_m \,
+        \exp\!\left[-\frac{E}{kT}\cdot\frac{T_m-T}{T_m}\right]
+        \frac{W(T_m) + W(T_m)^2}{W(T) + W(T)^2}
+
+    where :math:`W(T)` is the Lambert W function evaluated at a
+    temperature-dependent argument derived from the OTOR rate equations.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import tldecpy as tl
+    >>> T = np.linspace(350.0, 600.0, 300)
+    >>> I = tl.get_model("otor_lw")(T, Im=1000.0, E=1.3, Tm=460.0, R=0.15)
+    >>> print(f"Peak at T={T[I.argmax()]:.1f} K, I_max={I.max():.1f}")
+
+    References
+    ----------
+    .. [1] Kitis, G., and Vlachos, N. D. (2013). *General semi-analytical
+           expressions for TL, OSL and other luminescence stimulation modes
+           derived from the OTOR model using the Lambert-W function.*
+           Radiat. Meas. 48, 47.
+    .. [2] Sadek, A. M., et al. (2015). *Characterization of the one trap
+           one recombination (OTOR) level model using the Lambert-W function.*
+           Appl. Radiat. Isot. 95, 214.
     """
     k = KB_EV
 

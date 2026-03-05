@@ -1131,32 +1131,79 @@ def fit_multi(
     Parameters
     ----------
     x : numpy.ndarray
-        Temperature grid :math:`T` in kelvin.
+        Temperature grid :math:`T` in kelvin. Must be 1-D and monotonically
+        increasing. Minimum 10 points.
     y : numpy.ndarray
-        Observed thermoluminescence intensity :math:`I(T)`.
+        Observed thermoluminescence intensity :math:`I(T)`. Same length as
+        ``x``. Negative values are accepted but may degrade convergence.
     peaks : list[PeakSpec]
-        Peak specifications defining models, initial values and bounds.
+        One :class:`~tldecpy.schemas.PeakSpec` per component, each defining
+        a model key (e.g. ``"fo_rq"``, ``"otor_lw"``), initial parameter
+        values in ``init``, optional ``bounds``, and optional ``fixed``
+        parameters.
     bg : BackgroundSpec | None, optional
-        Background model specification. Use ``None`` for no background model.
+        Background model specification.  Pass ``None`` or omit for no
+        background.  Supported types: ``"linear"``, ``"exponential"``,
+        ``"none"``.
     beta : float, default=1.0
-        Heating rate :math:`\beta` in K/s.
+        Heating rate :math:`\beta` in K/s. Must be positive. Affects the
+        derived frequency factor ``s`` reported in peak results.
     robust : RobustOptions | None, optional
-        Robust-loss configuration for residual minimization.
+        Robust-loss configuration for residual minimisation.  Defaults to
+        linear (ordinary least squares) with no Poisson weighting.
     options : FitOptions | None, optional
-        Fit control options, including uncertainty settings.
+        Solver options (local optimizer, tolerances) and optional
+        :class:`~tldecpy.schemas.UncertaintyOptions`.
     strategy : {"local", "global_hybrid", "global_hybrid_pso"}, default="local"
-        Optimization strategy used to seed/refine parameter estimates.
+        Optimisation strategy.  ``"local"`` uses the configured optimizer
+        directly.  ``"global_hybrid"`` seeds with Differential Evolution;
+        ``"global_hybrid_pso"`` seeds with Particle Swarm Optimization.
+        Both global strategies perform a local TRF refinement on the best
+        seed.
 
     Returns
     -------
     MultiFitResult
-        Structured fit output including peak/background parameters, residuals,
-        goodness-of-fit metrics and uncertainty diagnostics.
+        Structured fit output.  Key fields:
+
+        - ``converged`` — ``True`` if the optimizer reached tolerance.
+        - ``metrics`` — :class:`~tldecpy.schemas.Metrics` with FOM, R²,
+          AIC, BIC and optional uncertainty fields.
+        - ``peaks`` — list of :class:`~tldecpy.schemas.PeakResult` with
+          fitted parameters, ``y_hat``, ``area`` and ``uncertainties``.
+        - ``hit_bounds`` — dict of ``{param_name: bool}``; ``True`` means
+          the parameter touched an optimization bound.
+        - ``jac_cond`` — Jacobian condition number estimate.
+
+    Raises
+    ------
+    ValueError
+        If ``local_optimizer`` and ``loss`` are incompatible (``"lm"``
+        supports only ``"linear"`` loss).
+    ValueError
+        If ``strategy`` is not one of the three accepted strings.
+
+    Notes
+    -----
+    The Levenberg-Marquardt optimizer (``"lm"``) does not support box bounds
+    natively.  Bounds are enforced via soft penalty terms appended to the
+    residual vector.
+
+    Examples
+    --------
+    >>> import tldecpy as tl
+    >>> T, I = tl.load_refglow("x001")
+    >>> peaks, bg = tl.autoinit_multi(T, I, max_peaks=2)
+    >>> result = tl.fit_multi(T, I, peaks=peaks, bg=bg, beta=1.0)
+    >>> print(result.converged, f"{result.metrics.FOM:.2f}%")
 
     References
     ----------
-    .. [1] Kitis, G., et al. Thermoluminescence kinetic models for glow-curve analysis.
-    .. [2] Virtanen, P., et al. (2020). SciPy 1.0 fundamental algorithms.
+    .. [1] Kitis, G., et al. (1998). Thermoluminescence glow-curve
+           deconvolution functions for first, second and general orders
+           of kinetics. J. Phys. D 31, 2636.
+    .. [2] Virtanen, P., et al. (2020). SciPy 1.0: Fundamental Algorithms.
+           Nature Methods 17, 261.
     """
     fitter = MultiFitter(x, y, beta=beta, robust=robust, options=options)
     for peak in peaks:

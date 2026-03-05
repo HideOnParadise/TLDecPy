@@ -27,36 +27,83 @@ def simulate(
     noise_config: dict[str, Any] | None = None,
 ) -> SimulationResult:
     r"""
-    Integrate TL kinetic ODEs under linear heating and return typed simulation payload.
+    Integrate TL kinetic ODEs under linear heating and return a typed result.
+
+    The time variable is related to temperature by the linear heating law
+    :math:`T(t) = T_0 + \beta t`.  The ODE is integrated in time and the
+    output is re-expressed on a temperature grid.
+
+    TL intensity is computed as minus the time-derivative of the first state
+    variable:  :math:`I(T) = -\dot{y}_0(t)`.
 
     Parameters
     ----------
     rhs_func : Callable
-        ODE right-hand side callable with signature compatible with
-        ``rhs_func(t, y, *params, beta=beta, T0=T0)``.
+        ODE right-hand side callable.  Must accept positional arguments
+        ``(t, y, *params)`` followed by keyword arguments ``beta`` and ``T0``:
+        ``rhs_func(t, y, *params, beta=beta, T0=T0) -> array-like``.
+        The first element of the return value is treated as the trap
+        population :math:`n(t)`; TL intensity is its negative derivative.
     params : tuple[float, ...]
-        Model-specific kinetic parameters.
+        Model-specific kinetic parameters passed as positional args to
+        ``rhs_func`` after ``t`` and ``y``.  Order must match the function
+        signature.
     T0 : float
-        Initial temperature, in kelvin.
+        Initial temperature in kelvin.  Must be < ``T_end``.
     T_end : float
-        Final temperature, in kelvin.
+        Final temperature in kelvin.  Must be > ``T0``.
     beta : float
-        Heating rate :math:`\beta` in K/s.
+        Linear heating rate :math:`\beta` in K/s.  Must be > 0.
     y0 : list[float]
-        Initial state vector.
+        Initial state vector passed to ``scipy.integrate.solve_ivp``.
+        Length must match the number of ODE states in ``rhs_func``.
     state_keys : list[str]
-        Names assigned to state trajectories in output.
+        Human-readable names for each state variable.  Used as keys in
+        ``SimulationResult.states``.  Length must match ``len(y0)``.
     method : str, default="LSODA"
-        Integration method accepted by ``scipy.integrate.solve_ivp``.
+        Integration algorithm accepted by ``scipy.integrate.solve_ivp``
+        (e.g. ``"LSODA"``, ``"RK45"``, ``"Radau"``).  ``"LSODA"`` is
+        recommended for stiff TL kinetics.
     points : int, default=1000
-        Number of temperature samples in output grid.
-    noise_config : dict[str, float] | None, optional
-        Optional additive-noise configuration forwarded to ``add_noise``.
+        Number of evenly-spaced output temperature samples.
+    noise_config : dict | None, optional
+        If provided, additive noise is applied to the intensity array.
+        Recognised keys:
+
+        - ``"mode"`` — ``"gaussian"`` (default) or ``"poisson"``
+        - ``"sigma"`` — float, standard deviation for Gaussian noise
+        - ``"seed"`` — int or ``None``, RNG seed for reproducibility
 
     Returns
     -------
     SimulationResult
-        Typed result with temperature, intensity and state trajectories.
+        Typed result with fields:
+
+        - ``T`` — temperature grid in kelvin (float64, 1-D, length ``points``)
+        - ``I`` — simulated TL intensity (float64, 1-D)
+        - ``states`` — dict mapping each ``state_key`` to its trajectory
+        - ``time`` — integration time vector in seconds
+
+    Notes
+    -----
+    A ``RuntimeWarning`` is emitted if the ODE integrator does not converge.
+    The result is still returned with whatever data was produced up to the
+    failure point.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import tldecpy as tl
+    >>> from tldecpy.simulate.fo import ode_fo, infer_n0_s
+    >>> T0, T_end, beta = 300.0, 600.0, 1.0
+    >>> E, Tm = 1.2, 450.0
+    >>> n0, s = infer_n0_s(Im=1.0, Tm=Tm, E=E, beta=beta)
+    >>> result = tl.simulate(
+    ...     ode_fo, params=(s, E),
+    ...     T0=T0, T_end=T_end, beta=beta,
+    ...     y0=[n0], state_keys=["n"],
+    ... )
+    >>> print(result.T.shape, result.I.max())
     """
     total_time = (T_end - T0) / beta
     t_span = (0.0, total_time)
