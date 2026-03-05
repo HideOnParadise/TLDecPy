@@ -24,9 +24,10 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
+          cache-dependency-path: pyproject.toml
 
       - name: Install docs dependencies
-        run: pip install -e ".[docs]"
+        run: pip install -e ".[docs]" "mkdocs>=1.5,<2.0" "mkdocs-material>=9.5,<10.0"
 
       - name: mkdocs build --strict
         run: mkdocs build --strict
@@ -49,9 +50,10 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
+          cache-dependency-path: pyproject.toml
 
       - name: Install docs dependencies
-        run: pip install -e ".[docs]"
+        run: pip install -e ".[docs]" "mkdocs>=1.5,<2.0" "mkdocs-material>=9.5,<10.0"
 
       - name: Configure git identity for mike
         run: |
