@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://hideonparadise.github.io/TLDecPy/dev/how-to/manual_peak_setup/">
       
       
-        <link rel="prev" href="../iterative_deconvolution/">
+        <link rel="prev" href="../">
       
       
         <link rel="next" href="../robust_fitting/">
@@ -511,7 +511,7 @@
   <span class="md-ellipsis">
     
   
-    Quick start — auto fit
+    Quick start — manual fit
   
 
     
@@ -632,34 +632,6 @@
     
   
     How-to guides
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../iterative_deconvolution/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    One-shot automatic deconvolution
   
 
     
@@ -902,6 +874,34 @@
     
   
     Synthetic curves with noise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iterative_deconvolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic initialization
   
 
     
@@ -1490,9 +1490,10 @@
 
 
 <h1 id="how-to-set-up-peaks-manually">How to set up peaks manually<a class="headerlink" href="#how-to-set-up-peaks-manually" title="Permanent link">&para;</a></h1>
-<p>Use this guide when <code>autoinit_multi</code> misses a peak, when you have prior
-knowledge of peak positions from literature, or when you need tight bounds for
-a publication-quality fit.</p>
+<p>In TL deconvolution, peak positions and kinetic parameters are generally
+constrained by the material under study. Defining each component explicitly —
+with physically motivated initial values and bounds — gives reproducible,
+interpretable results and is the standard approach for publication work.</p>
 <hr />
 <h2 id="define-each-peak-with-peakspec">Define each peak with PeakSpec<a class="headerlink" href="#define-each-peak-with-peakspec" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">tldecpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>

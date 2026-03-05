@@ -13,10 +13,10 @@
         <link rel="canonical" href="https://hideonparadise.github.io/TLDecPy/dev/how-to/iterative_deconvolution/">
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../simulate_synthetic/">
       
       
-        <link rel="next" href="../manual_peak_setup/">
+        <link rel="next" href="../../serialization/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>One-shot automatic deconvolution - tldecpy</title>
+        <title>Automatic initialization - tldecpy</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              One-shot automatic deconvolution
+              Automatic initialization
             
           </span>
         </div>
@@ -511,7 +511,7 @@
   <span class="md-ellipsis">
     
   
-    Quick start — auto fit
+    Quick start — manual fit
   
 
     
@@ -640,158 +640,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    One-shot automatic deconvolution
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    One-shot automatic deconvolution
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#minimal-call" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Minimal call
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#control-the-number-of-peaks-and-allowed-models" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Control the number of peaks and allowed models
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#add-robust-fitting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Add robust fitting
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#use-a-global-optimisation-strategy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Use a global optimisation strategy
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inspect-and-iterate" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Inspect and iterate
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#difference-from-autoinit_multi-fit_multi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Difference from autoinit_multi + fit_multi
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -932,6 +780,158 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic initialization
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic initialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#minimal-call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minimal call
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#control-the-number-of-peaks-and-allowed-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control the number of peaks and allowed models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-robust-fitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add robust fitting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-a-global-optimisation-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a global optimisation strategy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inspect-and-iterate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inspect and iterate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#difference-from-autoinit_multi-fit_multi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Difference from autoinit_multi + fit_multi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 

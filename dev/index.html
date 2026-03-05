@@ -466,10 +466,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#minimal-workflow" class="md-nav__link">
+  <a href="#typical-workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimal workflow
+        Typical workflow
       
     </span>
   </a>
@@ -617,7 +617,7 @@
   <span class="md-ellipsis">
     
   
-    Quick start — auto fit
+    Quick start — manual fit
   
 
     
@@ -733,34 +733,6 @@
     
   
     How-to guides
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="how-to/iterative_deconvolution/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    One-shot automatic deconvolution
   
 
     
@@ -901,6 +873,34 @@
     
   
     Synthetic curves with noise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="how-to/iterative_deconvolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic initialization
   
 
     
@@ -1412,10 +1412,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#minimal-workflow" class="md-nav__link">
+  <a href="#typical-workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimal workflow
+        Typical workflow
       
     </span>
   </a>
@@ -1495,33 +1495,46 @@
 
 
 <h1 id="tldecpy-documentation">tldecpy Documentation<a class="headerlink" href="#tldecpy-documentation" title="Permanent link">&para;</a></h1>
-<p><code>tldecpy</code> provides a reproducible workflow for thermoluminescence glow curve analysis:</p>
-<ul>
-<li>typed APIs for fitting and simulation</li>
-<li>physically grounded model families</li>
-<li>robust optimization options</li>
-<li>JSON-safe serialization contracts</li>
-</ul>
+<p><code>tldecpy</code> is a Python library for thermoluminescence glow-curve deconvolution. It supports multiple kinetic model families, robust optimization, and uncertainty estimation.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>tldecpy
 </code></pre></div>
-<h2 id="minimal-workflow">Minimal workflow<a class="headerlink" href="#minimal-workflow" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">tldecpy</span>
+<h2 id="typical-workflow">Typical workflow<a class="headerlink" href="#typical-workflow" title="Permanent link">&para;</a></h2>
+<p>In TL analysis the number of peaks and their initial parameters are generally known from prior measurements or from the material's published glow-curve structure. The recommended approach is to define each component explicitly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">tldecpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">T</span><span class="p">,</span> <span class="n">I</span> <span class="o">=</span> <span class="n">tldecpy</span><span class="o">.</span><span class="n">load_refglow</span><span class="p">(</span><span class="s2">&quot;x001&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">T</span><span class="p">,</span> <span class="n">I</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load_refglow</span><span class="p">(</span><span class="s2">&quot;x002&quot;</span><span class="p">)</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">specs</span><span class="p">,</span> <span class="n">bg</span> <span class="o">=</span> <span class="n">tldecpy</span><span class="o">.</span><span class="n">autoinit_multi</span><span class="p">(</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">T</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">I</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">max_peaks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">allow_models</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;fo_rq&quot;</span><span class="p">,</span> <span class="s2">&quot;go_kg&quot;</span><span class="p">,</span> <span class="s2">&quot;otor_lw&quot;</span><span class="p">),</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">)</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">res</span> <span class="o">=</span> <span class="n">tldecpy</span><span class="o">.</span><span class="n">fit_multi</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="n">specs</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">bg</span><span class="p">)</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Converged:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">converged</span><span class="p">)</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R2:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">R2</span><span class="p">)</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FOM:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">FOM</span><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">tl</span><span class="o">.</span><span class="n">PeakSpec</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;fo_rq&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="n">init</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Tm&quot;</span><span class="p">:</span> <span class="mf">417.0</span><span class="p">,</span> <span class="s2">&quot;Im&quot;</span><span class="p">:</span> <span class="mf">12000.0</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">1.35</span><span class="p">},</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        <span class="n">bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Tm&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">390.0</span><span class="p">,</span> <span class="mf">435.0</span><span class="p">),</span> <span class="s2">&quot;Im&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">40000.0</span><span class="p">),</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">)},</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="p">),</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">tl</span><span class="o">.</span><span class="n">PeakSpec</span><span class="p">(</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;P2&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;fo_rq&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        <span class="n">init</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Tm&quot;</span><span class="p">:</span> <span class="mf">456.0</span><span class="p">,</span> <span class="s2">&quot;Im&quot;</span><span class="p">:</span> <span class="mf">18000.0</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">1.48</span><span class="p">},</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        <span class="n">bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Tm&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">435.0</span><span class="p">,</span> <span class="mf">472.0</span><span class="p">),</span> <span class="s2">&quot;Im&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">50000.0</span><span class="p">),</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">)},</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="p">),</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="n">tl</span><span class="o">.</span><span class="n">PeakSpec</span><span class="p">(</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;P3&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;fo_rq&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>        <span class="n">init</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Tm&quot;</span><span class="p">:</span> <span class="mf">484.0</span><span class="p">,</span> <span class="s2">&quot;Im&quot;</span><span class="p">:</span> <span class="mf">28000.0</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">1.60</span><span class="p">},</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>        <span class="n">bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Tm&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">468.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">),</span> <span class="s2">&quot;Im&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">70000.0</span><span class="p">),</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">2.6</span><span class="p">)},</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    <span class="p">),</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    <span class="n">tl</span><span class="o">.</span><span class="n">PeakSpec</span><span class="p">(</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;P4&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;fo_rq&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>        <span class="n">init</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Tm&quot;</span><span class="p">:</span> <span class="mf">512.0</span><span class="p">,</span> <span class="s2">&quot;Im&quot;</span><span class="p">:</span> <span class="mf">45000.0</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">2.00</span><span class="p">},</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>        <span class="n">bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Tm&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">498.0</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span> <span class="s2">&quot;Im&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">120000.0</span><span class="p">),</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    <span class="p">),</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="p">]</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="n">result</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">fit_multi</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">8.4</span><span class="p">)</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Converged:&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">converged</span><span class="p">)</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R2:&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">R2</span><span class="p">)</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FOM:&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">FOM</span><span class="p">)</span>
 </code></pre></div>
+<p>For exploratory analysis on unfamiliar data, <code>autoinit_multi</code> can provide initial peak estimates, but results should always be reviewed and refined manually before publication.</p>
 <h2 id="public-api">Public API<a class="headerlink" href="#public-api" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Fitting: <code>fit_single_peak</code>, <code>fit_multi</code></li>
@@ -1531,13 +1544,12 @@
 <li>Models: <code>list_models</code>, <code>get_model</code></li>
 </ul>
 <h3 id="canonical-model-keys">Canonical model keys<a class="headerlink" href="#canonical-model-keys" title="Permanent link">&para;</a></h3>
-<p>Use canonical keys from the model registry (for example <code>fo_rq</code>, <code>go_kg</code>, <code>otor_lw</code>).
-Avoid legacy aliases in new scripts.</p>
+<p>Use canonical keys from the model registry (e.g. <code>fo_rq</code>, <code>go_kg</code>, <code>otor_lw</code>).</p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>fo_rb</code> uses the same FO core as <code>fo_rq</code>, with <code>alpha(z)</code> evaluated via an AAA barycentric rational backend from <code>Q(z)=exp(z)E2(z)</code> (<code>alpha=1-Q</code>).</li>
 </ul>
-<p>For serialization details, see <code>serialization.md</code>.<br />
+<p>For serialization details, see <code>serialization.md</code>.
 For versioning policy, see <code>versioning.md</code>.</p>
 
 

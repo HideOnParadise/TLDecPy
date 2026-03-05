@@ -16,7 +16,7 @@
         <link rel="prev" href="../tutorials/otor_fit/">
       
       
-        <link rel="next" href="iterative_deconvolution/">
+        <link rel="next" href="manual_peak_setup/">
       
       
         
@@ -511,7 +511,7 @@
   <span class="md-ellipsis">
     
   
-    Quick start — auto fit
+    Quick start — manual fit
   
 
     
@@ -662,34 +662,6 @@
   
   
     <li class="md-nav__item">
-      <a href="iterative_deconvolution/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    One-shot automatic deconvolution
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="manual_peak_setup/" class="md-nav__link">
         
   
@@ -810,6 +782,34 @@
     
   
     Synthetic curves with noise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="iterative_deconvolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic initialization
   
 
     
@@ -1335,7 +1335,7 @@
 
 
 <h1 id="how-to-guides">How-to guides<a class="headerlink" href="#how-to-guides" title="Permanent link">&para;</a></h1>
-<p>Task-focused recipes.  Each guide assumes you know the basics —
+<p>Task-focused recipes. Each guide assumes you know the basics —
 see the <a href="../tutorials/">Tutorials</a> first.</p>
 <table>
 <thead>
@@ -1346,12 +1346,8 @@ see the <a href="../tutorials/">Tutorials</a> first.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="iterative_deconvolution/">One-shot automatic deconvolution</a></td>
-<td>Run detection, seeding, and fitting in a single call with <code>iterative_deconvolution</code></td>
-</tr>
-<tr>
 <td><a href="manual_peak_setup/">Manual peak setup</a></td>
-<td>Build <code>PeakSpec</code> objects by hand without <code>autoinit_multi</code></td>
+<td>Build <code>PeakSpec</code> objects explicitly, set bounds and mix kinetic models</td>
 </tr>
 <tr>
 <td><a href="robust_fitting/">Robust fitting and loss functions</a></td>
@@ -1363,15 +1359,19 @@ see the <a href="../tutorials/">Tutorials</a> first.</p>
 </tr>
 <tr>
 <td><a href="fix_parameters/">Fix and freeze parameters</a></td>
-<td>Use <code>PeakSpec.fixed</code> to hold parameters constant</td>
+<td>Use <code>PeakSpec.fixed</code> to hold parameters constant during fitting</td>
 </tr>
 <tr>
 <td><a href="simulate_synthetic/">Synthetic curves with noise</a></td>
 <td>Generate reference data with Poisson noise and fit with matching weights</td>
 </tr>
 <tr>
+<td><a href="iterative_deconvolution/">Automatic initialization</a></td>
+<td>Use <code>autoinit_multi</code> for exploratory analysis on unfamiliar datasets</td>
+</tr>
+<tr>
 <td><a href="../serialization/">Serialize and archive results</a></td>
-<td>Export and reload <code>MultiFitResult</code> as JSON for reproducible workflows</td>
+<td>Export and reload <code>MultiFitResult</code> as JSON</td>
 </tr>
 </tbody>
 </table>
