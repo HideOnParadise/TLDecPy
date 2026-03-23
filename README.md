@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/HideOnParadise/TLDecPy/main/assets/logo.png" alt="TLDecPy Logo" width="400"/>
-</p>
+[<img align="left" height="110" width="110" src="https://raw.githubusercontent.com/HideOnParadise/TLDecPy/main/assets/icon.png" style="max-width: 100%; height: auto; max-height: 110px;">](https://hideonparadise.github.io/TLDecPy/)
 
 # TLDecPy: Thermoluminescence Glow-Curve Deconvolution in Python
 
