@@ -2,94 +2,94 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/serialization/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/versioning/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/explanation/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/explanation/continuous_traps/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/explanation/fit_metrics/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/explanation/kinetic_models/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/explanation/uncertainty_methods/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/how-to/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/how-to/fix_parameters/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/how-to/iterative_deconvolution/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/how-to/manual_peak_setup/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/how-to/robust_fitting/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/how-to/simulate_synthetic/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/how-to/uncertainty_budget/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/reference/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/reference/api/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/reference/errors/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/reference/models/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/reference/schemas/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/tutorials/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/tutorials/otor_fit/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
     <url>
          <loc>https://hideonparadise.github.io/TLDecPy/dev/tutorials/quickstart/</loc>
-         <lastmod>2026-03-05</lastmod>
+         <lastmod>2026-03-23</lastmod>
     </url>
 </urlset>
