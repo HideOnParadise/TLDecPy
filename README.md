@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/HideOnParadise/TLDecPy/main/assets/logo.png" alt="TLDecPy Logo" width="400"/>
+</p>
+
 # TLDecPy: Thermoluminescence Glow-Curve Deconvolution in Python
 
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)

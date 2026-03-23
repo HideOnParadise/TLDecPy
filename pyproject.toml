@@ -77,6 +77,8 @@ include = [
     "tldecpy/py.typed",
     "tldecpy/data/refglow_files/*.csv",
     "tldecpy/data/*.npz",
+    "assets/logo.png",
+    "assets/icon.png",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -87,6 +89,7 @@ include = [
     "/tldecpy",
     "/tests",
     "/examples",
+    "/assets",
     "/README.md",
     "/LICENSE",
     "/pyproject.toml",

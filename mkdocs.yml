@@ -7,6 +7,8 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
+  logo: logo.png
+  favicon: icon.png
   palette:
     - scheme: default
       primary: blue

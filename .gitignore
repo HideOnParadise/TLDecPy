@@ -94,3 +94,9 @@ scripts/output/
 figures/
 *.png
 *.pdf
+
+# Allow project logo assets (must come after *.png rule)
+!assets/logo.png
+!assets/icon.png
+!docs/logo.png
+!docs/icon.png
